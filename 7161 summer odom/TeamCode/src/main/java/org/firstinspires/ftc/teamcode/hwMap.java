@@ -2,15 +2,16 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 
 public class hwMap {
-    public DcMotor FL; //Motor 0 - frontLeft
-    public DcMotor BL; //Motor 1 - backLeft
-    public DcMotor BR; //Motor 2 - backRight
-    public DcMotor FR; //Motor 3 - frontRight
+    public DcMotor fl; //Motor 0 - frontLeft
+    public DcMotor fr; //Motor 1 - backLeft
+    public DcMotor br; //Motor 2 - backRight
+    public DcMotor bl; //Motor 3 - frontRight
 
 
     public BNO055IMU imu; //bus 0
@@ -23,19 +24,19 @@ public class hwMap {
     HardwareMap hardwareMap;
 
     public hwMap() {
-        FL = null;
-        BL = null;
-        BR = null;
-        FR = null;
+        fl = null;
+        fr = null;
+        br = null;
+        bl = null;
     }
 
     public void init(HardwareMap h) {
         hardwareMap = h;
 
-        BR = hardwareMap.get(DcMotor.class, "backRight");
-        FR = hardwareMap.get(DcMotor.class, "frontRight");
-        FL = hardwareMap.get(DcMotor.class, "frontLeft");
-        BL = hardwareMap.get(DcMotor.class, "backLeft");
+        DcMotor fl = hardwareMap.dcMotor.get("frontLeft");
+        DcMotor fr = hardwareMap.dcMotor.get("frontRight");
+        DcMotor bl = hardwareMap.dcMotor.get("backLeft");
+        DcMotor br = hardwareMap.dcMotor.get("backRight");
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode = BNO055IMU.SensorMode.IMU;
@@ -48,17 +49,17 @@ public class hwMap {
         imu.initialize(parameters);
 
 
-        FL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         freeze();
 
-        FL.setDirection(DcMotor.Direction.FORWARD);
-        BL.setDirection(DcMotor.Direction.FORWARD);
-        BR.setDirection(DcMotor.Direction.REVERSE);
-        FR.setDirection(DcMotor.Direction.REVERSE);
+        fl.setDirection(DcMotor.Direction.FORWARD);
+        bl.setDirection(DcMotor.Direction.FORWARD);
+        br.setDirection(DcMotor.Direction.REVERSE);
+        fr.setDirection(DcMotor.Direction.REVERSE);
 
         resetEncoders();
 
@@ -67,77 +68,28 @@ public class hwMap {
 
 
     public void freeze() {
-        FL.setPower(0);
-        BL.setPower(0);
-        BR.setPower(0);
-        FR.setPower(0);
+        fl.setPower(0);
+        bl.setPower(0);
+        br.setPower(0);
+        fr.setPower(0);
 
     }
 
 
     public void resetEncoders() {
-        FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
     }
 
 
     public double getEncoderAvg() {
-        return ((Math.abs(FR.getCurrentPosition()) + Math.abs(FL.getCurrentPosition())) / 2.0);
-    }
-
-    public void drive(double x, double y, double t)
-    {
-
-        double magnitude = Math.sqrt(x * x + y * y);
-        double distance = Math.atan2(y, x);
-        double turn =  2 * t / 3.0;
-
-
-        //calculate power with angle and magnitude
-
-        double backLeft = magnitude * Math.sin(distance - Math.PI / 4) + turn;
-        double backRight = magnitude * Math.sin(distance + Math.PI / 4) - turn;
-        double frontLeft = magnitude * Math.sin(distance + Math.PI / 4) + turn;
-        double frontRight = magnitude * Math.sin(distance - Math.PI / 4) - turn;
-
-        /*in case the power to the motors gets over 1(as 1 is the maximum motor value, and in order
-        to strafe diagonally, wheels have to move at different speeds), we divide them all by the
-        highest value. This keeps them under 1, but in respect with each other*/
-
-        if (magnitude != 0) {
-            double divisor = 0;
-            divisor = Math.max(Math.abs(backLeft), Math.abs(backRight));
-            divisor = Math.max(divisor, Math.abs(frontLeft));
-            divisor = Math.max(divisor, Math.abs(frontRight));
-
-            telemetry.addData("divisor: ", divisor);
-
-            backLeft = magnitude * (backLeft / divisor);
-            backRight = magnitude * (backRight / divisor);
-            frontLeft = magnitude * (frontLeft / divisor);
-            frontRight = magnitude * (frontRight / divisor);
-        }
-
-
-        BL.setPower(backRight);
-        BR.setPower(backLeft);
-        FL.setPower(frontRight);
-        FR.setPower(frontLeft);
-
-
-        telemetry.addData("encoder tick FL", FL.getCurrentPosition());
-        telemetry.addData("encoder tick FR", FR.getCurrentPosition());
-        telemetry.addData("encoder tick BL", BL.getCurrentPosition());
-        telemetry.addData("encoder tick BR", BR.getCurrentPosition());
-
-
-
-        telemetry.update();
-
+        return ((Math.abs(fr.getCurrentPosition()) + Math.abs(fl.getCurrentPosition())) / 2.0);
     }
 
 
 }
+
+//TODO: if problem, look at proxy
