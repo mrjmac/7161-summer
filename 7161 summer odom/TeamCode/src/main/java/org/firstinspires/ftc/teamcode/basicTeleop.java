@@ -19,6 +19,9 @@ public class basicTeleop extends OpMode {
     public DcMotor fr; //Motor 1 - backLeft
     public DcMotor br; //Motor 2 - backRight
     public DcMotor bl;
+    DcMotor verticalLeft;
+  //  DcMotor verticalRight;
+    DcMotor horizontal;
 
     @Override
     public void init() {
@@ -26,6 +29,11 @@ public class basicTeleop extends OpMode {
          fr = hardwareMap.dcMotor.get("frontRight");
          bl = hardwareMap.dcMotor.get("backLeft");
          br = hardwareMap.dcMotor.get("backRight");
+
+        verticalLeft = hardwareMap.dcMotor.get("backLeft");
+    //    verticalRight = hardwareMap.dcMotor.get("frontLeft");
+        horizontal = hardwareMap.dcMotor.get("backRight");
+
 
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); //define motor settings
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -36,6 +44,12 @@ public class basicTeleop extends OpMode {
         fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        verticalLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      //  verticalRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        horizontal.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        verticalLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+     //   verticalRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        horizontal.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         bl.setDirection(DcMotorSimple.Direction.REVERSE);
         fr.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -83,6 +97,9 @@ public class basicTeleop extends OpMode {
             bl.setPower(0);
             br.setPower(0);
         }
+        telemetry.addData("horizontal:", horizontal.getCurrentPosition());
+        telemetry.addData("verticalLeft:", verticalLeft.getCurrentPosition());
+    //    telemetry.addData("verticalRight:", verticalRight.getCurrentPosition());
 
         telemetry.update();
     }
