@@ -1,15 +1,16 @@
 package org.firstinspires.ftc.teamcode.drive;
 
+import java.util.Arrays;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.TwoTrackingWheelLocalizer;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import org.firstinspires.ftc.teamcode.util.Encoder;
 
-import java.util.Arrays;
-import java.util.List;
+import org.firstinspires.ftc.teamcode.util.Encoder;
 
 /*
  * Sample tracking wheel localizer implementation assuming the standard configuration:
@@ -63,7 +64,8 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
 
         // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
 
-
+        parallelEncoder.setDirection(Encoder.Direction.REVERSE);
+        perpendicularEncoder.setDirection(Encoder.Direction.REVERSE);
     }
 
     public static double encoderTicksToInches(double ticks) {
