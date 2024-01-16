@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/7161-summer.iml" filepath="$PROJECT_DIR$/.idea/7161-summer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/7161_summer_odom.iml" filepath="$PROJECT_DIR$/.idea/modules/7161_summer_odom.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/7161_summer_odom.FtcRobotController.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/7161_summer_odom.FtcRobotController.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/7161_summer_odom.TeamCode.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/7161_summer_odom.TeamCode.iml" />
     </modules>
   </component>
 </project>
